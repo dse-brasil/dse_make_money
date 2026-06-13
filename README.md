@@ -1,8 +1,8 @@
-# Omni-Market Investment Dashboard (Digital Family Office)
+# DSE Make Money (Digital Family Office)
 
 ![Versão](https://img.shields.io/badge/vers%C3%A3o-v1.2.0-blueviolet)
 
-Este projeto estabelece a arquitetura fundacional e o código para o **Dashboard Omni-Market de Investimentos**, focado em gerenciamento de patrimônio familiar, com rebalanceamento de ativos de alta frequência (B3 & Crypto), ativos ilíquidos (Imóveis/FIIs) e tesouraria de baixo risco (Renda Fixa/CDBs).
+Este projeto estabelece a arquitetura fundacional e o código para o **DSE Make Money**, focado em gerenciamento de patrimônio familiar, com rebalanceamento de ativos de alta frequência (B3 & Crypto), ativos ilíquidos (Imóveis/FIIs) e tesouraria de baixo risco (Renda Fixa/CDBs).
 
 ---
 
@@ -66,7 +66,7 @@ Onde a alíquota de IR é definida por:
 ## 3. Estrutura de Diretórios Criada
 
 ```
-omni_market_dashboard/
+dse_make_money/
 ├── config/                  # Configurações do ambiente e parâmetros de risco
 │   └── settings.py
 ├── database/                # Conexões e esquemas DDL (Relacional + Time-Series)
@@ -98,13 +98,13 @@ pip install -r requirements.txt
 ### 4.2. Rodar o Worker de CDI
 Execute o script no terminal para buscar a taxa CDI atual do Banco Central:
 ```bash
-python omni_market_dashboard/workers/cdi_worker.py
+python dse_make_money/workers/cdi_worker.py
 ```
 
 ### 4.3. Iniciar o Dashboard Streamlit
 Para inicializar o painel visual e ver o rebalanceamento de carteira interativo e o ranking de CDBs equivalentes em tempo real:
 ```bash
-streamlit run omni_market_dashboard/dashboard/app.py
+streamlit run dse_make_money/dashboard/app.py
 ```
 
 ---

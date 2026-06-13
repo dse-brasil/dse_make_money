@@ -1,11 +1,11 @@
 import logging
-from omni_market_dashboard.config import settings
+from dse_make_money.config import settings
 
 logger = logging.getLogger("RiskManager")
 
 class RiskManager:
     """
-    Omni-Market Risk Manager Engine.
+    DSE Make Money Risk Manager Engine.
     Handles capital protection, drawdown limits, and automated treasury sweeps
     (transferring excess high-frequency profits to low-risk fixed income CDBs).
     """

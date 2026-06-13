@@ -7,14 +7,14 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import datetime
-from omni_market_dashboard.workers.cdi_worker import fetch_latest_cdi, calculate_annualized_rate
-from omni_market_dashboard.workers.fixed_income_scraper import FixedIncomeScraper
-from omni_market_dashboard.core.risk_manager import RiskManager
-from omni_market_dashboard.core.rebalancer import PortfolioRebalancer
+from dse_make_money.workers.cdi_worker import fetch_latest_cdi, calculate_annualized_rate
+from dse_make_money.workers.fixed_income_scraper import FixedIncomeScraper
+from dse_make_money.core.risk_manager import RiskManager
+from dse_make_money.core.rebalancer import PortfolioRebalancer
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="DSE Make Money - Dashboard Omni-Market",
+    page_title="DSE Make Money",
     page_icon="💼",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -151,7 +151,7 @@ menu_option = st.sidebar.radio("Ir para:", ["📊 Visão Geral do Portfólio", "
 # ==========================================
 if menu_option == "📊 Visão Geral do Portfólio":
     # 5. Main Content Area
-    st.markdown("<h1 class='main-header'>Dashboard Omni-Market de Investimentos</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-header'>DSE Make Money</h1>", unsafe_allow_html=True)
     st.markdown("<p class='sub-header'>Consolidado Patrimonial da Tesouraria e Alta Liquidez (Family Office)</p>", unsafe_allow_html=True)
 
     # Row 1: KPI Metrics

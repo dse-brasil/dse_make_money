@@ -2,7 +2,7 @@ import os
 import sqlite3
 import logging
 from contextlib import contextmanager
-from omni_market_dashboard.config import settings
+from dse_make_money.config import settings
 
 logger = logging.getLogger("DatabaseConnection")
 
