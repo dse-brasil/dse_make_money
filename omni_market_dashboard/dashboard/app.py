@@ -14,7 +14,7 @@ from omni_market_dashboard.core.rebalancer import PortfolioRebalancer
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="Family Office - Dashboard Omni-Market",
+    page_title="DSE Make Money - Dashboard Omni-Market",
     page_icon="💼",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -106,7 +106,8 @@ def get_cdi_data():
 cdi_info = get_cdi_data()
 
 # 4. Sidebar Controls
-st.sidebar.markdown("<h2 class='card-title'>Digital Family Office</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 class='card-title'>DSE Make Money</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='font-size:0.85rem; color:#94A3B8; margin-top:-15px; margin-bottom:15px;'>Versão <b>v1.2.0</b><br/>Dev: <b>Data Science Enthusiasts</b></p>", unsafe_allow_html=True)
 st.sidebar.subheader("Parâmetros do Portfólio")
 
 # Current allocation sliders (for real-time rebalancing math)
