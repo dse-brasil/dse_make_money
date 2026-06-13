@@ -138,19 +138,67 @@ if "completed_sweeps" not in st.session_state:
         }
     ]
 
+# Initialize session state for bot trades if not present
+if "bot_trades" not in st.session_state:
+    st.session_state.bot_trades = [
+        {"Timestamp": "2026-06-13 09:45:12", "Ativo": "BTC/USDT", "Operação": "COMPRA", "Qtd": 0.450000, "Preço": 68450.00, "P&L R$": 1250.00, "Estratégia": "Arbitragem DeFi/Binance", "Status": "CONCLUÍDO"},
+        {"Timestamp": "2026-06-13 09:12:05", "Ativo": "PETR4", "Operação": "VENDA", "Qtd": 500.0, "Preço": 38.51, "P&L R$": -450.00, "Estratégia": "Cruzamento de Médias MT5", "Status": "CONCLUÍDO"},
+        {"Timestamp": "2026-06-13 08:34:55", "Ativo": "ETH/USDT", "Operação": "COMPRA", "Qtd": 3.250000, "Preço": 3540.20, "P&L R$": 1820.00, "Estratégia": "MFI Divergência Crypto", "Status": "CONCLUÍDO"},
+        {"Timestamp": "2026-06-13 08:05:10", "Ativo": "VALE3", "Operação": "COMPRA", "Qtd": 800.0, "Preço": 62.40, "P&L R$": 640.00, "Estratégia": "Bands Squeeze MT5", "Status": "CONCLUÍDO"},
+        {"Timestamp": "2026-06-12 17:54:30", "Ativo": "SOL/USDT", "Operação": "VENDA", "Qtd": 12.000000, "Preço": 145.50, "P&L R$": 320.00, "Estratégia": "Volume Arbitragem", "Status": "CONCLUÍDO"}
+    ]
+
+def simulate_bot_trade():
+    assets = ["BTC/USDT", "ETH/USDT", "PETR4", "VALE3", "SOL/USDT", "WEGE3"]
+    asset = np.random.choice(assets)
+    op = np.random.choice(["COMPRA", "VENDA"])
+    
+    if asset == "BTC/USDT":
+        price = round(float(np.random.uniform(68000, 69000)), 2)
+        qtd = round(float(np.random.uniform(0.1, 0.5)), 4)
+    elif asset == "ETH/USDT":
+        price = round(float(np.random.uniform(3500, 3600)), 2)
+        qtd = round(float(np.random.uniform(1, 4)), 4)
+    elif asset == "SOL/USDT":
+        price = round(float(np.random.uniform(140, 150)), 2)
+        qtd = round(float(np.random.uniform(10, 30)), 4)
+    else: # B3 Stock
+        price = round(float(np.random.uniform(30, 80)), 2)
+        qtd = float(np.random.choice([100, 200, 500, 1000]))
+        
+    pnl = round(float(np.random.uniform(-800, 2500)), 2)
+    strat = np.random.choice([
+        "Arbitragem de Liquidez",
+        "Volume Profile Momentum",
+        "RSI Squeeze Bot",
+        "Smart Money Flows",
+        "MT5 Algorithmic Trend"
+    ])
+    
+    new_trade = {
+        "Timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Ativo": asset,
+        "Operação": op,
+        "Qtd": qtd,
+        "Preço": price,
+        "P&L R$": pnl,
+        "Estratégia": strat,
+        "Status": "CONCLUÍDO"
+    }
+    st.session_state.bot_trades.insert(0, new_trade)
+
 st.sidebar.markdown("---")
 st.sidebar.subheader("Resultados do Período")
 day_trade_profits = st.sidebar.number_input("Lucro Day Trade Acumulado R$", value=28000.0, step=1000.0)
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("Menu de Navegação")
-menu_option = st.sidebar.radio("Ir para:", ["📊 Visão Geral do Portfólio", "💸 Gerenciamento de Resgate"])
+menu_option = st.sidebar.radio("Ir para:", ["📊 Visão Geral & dse_mm_bot", "💸 Gerenciamento de Resgate", "📖 Guia de Operação"])
 
 # ==========================================
-# PAGE 1: PORTFOLIO OVERVIEW
+# PAGE 1: PORTFOLIO OVERVIEW & BOT
 # ==========================================
-if menu_option == "📊 Visão Geral do Portfólio":
-    # 5. Main Content Area
+if menu_option == "📊 Visão Geral & dse_mm_bot":
     st.markdown("<h1 class='main-header'>DSE Make Money</h1>", unsafe_allow_html=True)
     st.markdown("<p class='sub-header'>Consolidado Patrimonial da Tesouraria e Alta Liquidez (Family Office)</p>", unsafe_allow_html=True)
 
@@ -173,8 +221,7 @@ if menu_option == "📊 Visão Geral do Portfólio":
         )
 
     with col3:
-        # Estimate FII Yield (Mocked portfolio yield average)
-        avg_fii_yield = 9.85 # % p.a.
+        avg_fii_yield = 9.85
         monthly_passive_income = (alloc_fii * (avg_fii_yield / 100.0)) / 12.0
         st.metric(
             label="Renda Passiva Mensal Est.",
@@ -183,7 +230,6 @@ if menu_option == "📊 Visão Geral do Portfólio":
         )
 
     with col4:
-        # High Frequency Share of wallet
         hf_pct = ((alloc_stocks + alloc_crypto) / total_wealth) * 100.0
         st.metric(
             label="Alocação em Risco (Alta Liq.)",
@@ -192,7 +238,7 @@ if menu_option == "📊 Visão Geral do Portfólio":
             delta_color="inverse" if hf_pct > 40 else "normal"
         )
 
-    # Row 2: Risk Management & Capital Protection Advice
+    # Row 2: Risk Management Advice
     st.markdown("<h3 class='card-title'>Motor de Gerenciamento de Risco e Salvaguarda</h3>", unsafe_allow_html=True)
 
     rm = RiskManager(current_allocs)
@@ -215,13 +261,11 @@ if menu_option == "📊 Visão Geral do Portfólio":
         </div>
         """, unsafe_allow_html=True)
 
-    # Row 3: Visual Charts and Broker Shelves ranking
-    chart_col, shelf_col = st.columns([3, 2])
+    # Row 3: Charts and Bot Live History (Side by Side)
+    chart_col, trade_col = st.columns([3, 2])
 
     with chart_col:
-        st.markdown("<h3 class='card-title'>Distribuição Histórica & Alocação Atual</h3>", unsafe_allow_html=True)
-        
-        # Generate mock chart data for portfolio equity over time
+        st.markdown("<h3 class='card-title'>Curva Patrimonial & Acumulação</h3>", unsafe_allow_html=True)
         dates = pd.date_range(start="2026-05-01", end="2026-06-13", freq="D")
         base_equity = np.linspace(total_wealth * 0.95, total_wealth, len(dates))
         noise = np.random.normal(0, 5000, len(dates))
@@ -231,17 +275,32 @@ if menu_option == "📊 Visão Geral do Portfólio":
             "Patrimônio Consolidado": base_equity + noise,
             "Curva de Acumulação CDBs": np.linspace(alloc_fixed * 0.97, alloc_fixed, len(dates))
         }).set_index("Data")
-        
         st.line_chart(df_chart)
 
-    with shelf_col:
-        st.markdown("<h3 class='card-title'>Melhores Taxas CDB/LCI/LCA (Renda Fixa)</h3>", unsafe_allow_html=True)
+    with trade_col:
+        st.markdown("<h3 class='card-title'>🤖 Operações em Tempo Real (dse_mm_bot)</h3>", unsafe_allow_html=True)
         
+        # Simulate new trade
+        if st.button("⚙️ Simular Novo Trade (dse_mm_bot)", use_container_width=True):
+            simulate_bot_trade()
+            st.success("🤖 dse_mm_bot abriu e liquidou uma nova posição quantitativa!")
+            
+        df_t = pd.DataFrame(st.session_state.bot_trades)
+        df_t_disp = df_t.copy()
+        df_t_disp["Preço"] = df_t_disp["Preço"].map("R$ {:,.2f}".format)
+        df_t_disp["P&L R$"] = df_t_disp["P&L R$"].map("R$ {:,.2f}".format)
+        
+        st.dataframe(df_t_disp[["Timestamp", "Ativo", "Operação", "Qtd", "Preço", "P&L R$", "Estratégia"]], use_container_width=True, height=280)
+
+    # Row 4: Fixed Income Catalog and Rebalancer (Side by Side)
+    shelf_col, rebal_col = st.columns([1, 1])
+    
+    with shelf_col:
+        st.markdown("<h3 class='card-title'>Melhores Taxas CDB/LCI/LCA</h3>", unsafe_allow_html=True)
         scraper = FixedIncomeScraper()
         ranked_assets = scraper.map_broker_shelves()
         
         df_ranked = pd.DataFrame(ranked_assets)
-        # Rename headers for user-friendly table
         df_ranked = df_ranked.rename(columns={
             "broker": "Corretora",
             "issuer": "Emissor",
@@ -251,31 +310,28 @@ if menu_option == "📊 Visão Geral do Portfólio":
             "equivalent_cdi_pct": "Equivalente CDB (% CDI)",
             "fgc_covered": "Garantia FGC"
         })
+        st.dataframe(df_ranked[["Emissor", "Tipo", "Taxa (% CDI)", "Equivalente CDB (% CDI)", "Corretora"]], use_container_width=True)
         
-        st.dataframe(df_ranked[["Emissor", "Tipo", "Taxa (% CDI)", "Equivalente CDB (% CDI)", "Corretora", "Garantia FGC"]], use_container_width=True)
+    with rebal_col:
+        st.markdown("<h3 class='card-title'>Plano de Rebalanceamento Estrutural</h3>", unsafe_allow_html=True)
+        rebalancer = PortfolioRebalancer()
+        rebal_results = rebalancer.calculate_rebalancing(current_allocs)
 
-    # Row 4: Asset Rebalancer Math
-    st.markdown("<h3 class='card-title'>Plano de Rebalanceamento Estrutural</h3>", unsafe_allow_html=True)
-    rebalancer = PortfolioRebalancer()
-    rebal_results = rebalancer.calculate_rebalancing(current_allocs)
-
-    if "rebalancing_details" in rebal_results:
-        df_rebal = pd.DataFrame(rebal_results["rebalancing_details"]).T
-        
-        # Style deviations
-        df_rebal["current_value"] = df_rebal["current_value"].map("R$ {:,.2f}".format)
-        df_rebal["target_value"] = df_rebal["target_value"].map("R$ {:,.2f}".format)
-        df_rebal["deviation_value"] = df_rebal["deviation_value"].map("R$ {:,.2f}".format)
-        df_rebal["current_percentage"] = df_rebal["current_percentage"].map("{:.2f}%".format)
-        df_rebal["target_percentage"] = df_rebal["target_percentage"].map("{:.2f}%".format)
-        df_rebal["deviation_percentage"] = df_rebal["deviation_percentage"].map("{:.2f}%".format)
-        
-        st.dataframe(df_rebal, use_container_width=True)
+        if "rebalancing_details" in rebal_results:
+            df_rebal = pd.DataFrame(rebal_results["rebalancing_details"]).T
+            df_rebal["current_value"] = df_rebal["current_value"].map("R$ {:,.2f}".format)
+            df_rebal["target_value"] = df_rebal["target_value"].map("R$ {:,.2f}".format)
+            df_rebal["deviation_value"] = df_rebal["deviation_value"].map("R$ {:,.2f}".format)
+            df_rebal["current_percentage"] = df_rebal["current_percentage"].map("{:.2f}%".format)
+            df_rebal["target_percentage"] = df_rebal["target_percentage"].map("{:.2f}%".format)
+            df_rebal["deviation_percentage"] = df_rebal["deviation_percentage"].map("{:.2f}%".format)
+            
+            st.dataframe(df_rebal[["current_value", "current_percentage", "target_value", "deviation_value", "action"]], use_container_width=True)
 
 # ==========================================
 # PAGE 2: REDEMPTION MANAGEMENT
 # ==========================================
-else:
+elif menu_option == "💸 Gerenciamento de Resgate":
     st.markdown("<h1 class='main-header'>💸 Gerenciamento de Resgates</h1>", unsafe_allow_html=True)
     st.markdown("<p class='sub-header'>Aprovador de Transferências de Lucro Excedente para a Tesouraria Vault via Pix</p>", unsafe_allow_html=True)
 
@@ -295,11 +351,9 @@ else:
         </div>
         """, unsafe_allow_html=True)
         
-        # Confirm Pix Action Button
         confirm_btn = st.button("🚀 Confirmar Envio Pix e Atualizar Tesouraria", use_container_width=True)
         
         if confirm_btn:
-            # Generate simulated hash
             simulated_hash = f"tx_{np.random.randint(100000, 999999)}cd{np.random.randint(10000, 99999)}"
             new_record = {
                 "Data": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -333,3 +387,45 @@ else:
     df_disp["Valor"] = df_disp["Valor"].map("R$ {:,.2f}".format)
     
     st.dataframe(df_disp, use_container_width=True)
+
+# ==========================================
+# PAGE 3: OPERATION WALKTHROUGH GUIDE
+# ==========================================
+else:
+    st.markdown("<h1 class='main-header'>📖 Guia de Operação - DSE Make Money</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>Instruções detalhadas sobre como operar e gerenciar o Family Office Financeiro</p>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    Este guia orienta o operador de patrimônio ou membro do Family Office sobre como funciona o ciclo operacional da plataforma **DSE Make Money**.
+    
+    ---
+    
+    ### 1. Fluxo Geral de Operação
+    
+    O sistema funciona em um ciclo integrado de 4 etapas:
+    
+    1. **Monitoramento e Ingestão (Workers)**:
+       - O `cdi_worker.py` consome a API do Banco Central (SGS Série 12) diariamente para atualizar a taxa de juros de referência do país.
+       - O `fixed_income_scraper.py` monitora as corretoras mapeando as taxas de CDBs, LCIs e LCAs disponíveis.
+    2. **Operação Quant (dse_mm_bot)**:
+       - O robô inteligente `dse_mm_bot` opera trades de alta frequência na B3 (via MetaTrader 5) e em exchanges de Crypto (via CCXT). 
+       - O histórico dessas operações é exibido em tempo real no painel.
+    3. **Análise de Risco (Risk Engine)**:
+       - O robô acumula lucros. O `RiskManager` monitora continuamente os lucros excedentes das operações de risco em relação ao patrimônio sob gestão (gatilho padrão de 15% de lucro).
+    4. **Sweep de Salvaguarda de Capital (Resgates)**:
+       - Caso o lucro excedente atinja o gatilho, o sistema recomenda o **Sweep de Tesouraria**.
+       - O operador acessa a aba **Gerenciamento de Resgate**, aprova a operação e realiza o envio do Pix para a conta de custódia de baixo risco (`14998223377`).
+    
+    ---
+    
+    ### 2. Passo a Passo para Testar o Sistema no Dashboard
+    
+    Para ver a inteligência e as políticas de rebalanceamento funcionando na prática:
+    
+    *   **Passo 1: Ajuste a Alocação Inicial**: Na barra lateral esquerda, configure os valores reais do patrimônio familiar em CDBs, Ações, FIIs e Crypto.
+    *   **Passo 2: Acompanhe as Operações do Robô**: Na página principal, veja o histórico de negociações do `dse_mm_bot`. Clique no botão **"⚙️ Simular Novo Trade (dse_mm_bot)"** para forçar o robô a abrir e liquidar uma nova posição em tempo real.
+    *   **Passo 3: Atingindo o Gatilho de Sweep**: Ajuste o campo **"Lucro Day Trade Acumulado"** na barra lateral. Se o lucro ultrapassar **15%** do patrimônio total sob gestão, um alerta vermelho de resgate recomendado aparecerá.
+    *   **Passo 4: Liquidar o Sweep**: Vá na página **"💸 Gerenciamento de Resgate"** no menu. A solicitação estará pendente. Clique no botão de confirmação Pix. A transferência será realizada ficticiamente para a chave `14998223377`, gerando o comprovante oficial liquidado no Banco Central.
+    *   **Passo 5: Rebalanceamento**: Após confirmar o resgate, atualize o saldo de CDBs na barra lateral somando o valor resgatado para reequilibrar a carteira seguindo o plano do rebalanceador estrutural.
+    """, unsafe_allow_html=True)
+
