@@ -1,5 +1,7 @@
 # Omni-Market Investment Dashboard (Digital Family Office)
 
+![Versão](https://img.shields.io/badge/vers%C3%A3o-v1.2.0-blueviolet)
+
 Este projeto estabelece a arquitetura fundacional e o código para o **Dashboard Omni-Market de Investimentos**, focado em gerenciamento de patrimônio familiar, com rebalanceamento de ativos de alta frequência (B3 & Crypto), ativos ilíquidos (Imóveis/FIIs) e tesouraria de baixo risco (Renda Fixa/CDBs).
 
 ---
@@ -104,3 +106,16 @@ Para inicializar o painel visual e ver o rebalanceamento de carteira interativo 
 ```bash
 streamlit run omni_market_dashboard/dashboard/app.py
 ```
+
+---
+
+## 👥 Colaboradores
+
+Atualmente, o projeto é mantido e desenvolvido por:
+* **Fernando Torres Ferreira Silva** ([@fertorresfs](https://github.com/fertorresfs)) — Idealizador e desenvolvedor ativo, responsável pela arquitetura do bot, integração de RAG, segurança e painel administrativo web.
+
+---
+
+## ⚖️ Licença
+
+Este projeto é de uso interno e educacional da comunidade **Data Science Enthusiasts (DSE)**. Consulte as políticas internas de contribuição antes de realizar pull requests.
