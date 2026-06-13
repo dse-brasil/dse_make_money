@@ -181,7 +181,8 @@ if sweep_result["sweep_recommended"]:
     <div class="alert-card">
         <strong>🚨 ALERTA DE SWEEP DE TESOURARIA:</strong> Recomenda-se resgatar 
         <strong>R$ {sweep_result['sweep_amount']:,.2f}</strong> dos lucros excedentes do Day Trade/Ações 
-        e alocar imediatamente em <strong>CDBs de Liquidez Diária</strong>.<br/>
+        e transferir para a chave Pix da tesouraria: <code>{sweep_result['pix_key']}</code> 
+        para alocação imediata em <strong>CDBs de Liquidez Diária</strong>.<br/>
         <em>Razão: {sweep_result['reason']}</em>
     </div>
     """, unsafe_allow_html=True)

@@ -25,6 +25,7 @@ MIN_CDB_RENTABILITY_TARGET = 110.0  # Min % of CDI to trigger alerts (e.g. 110% 
 # Suggest rebalancing if day trading profits exceed target
 DAY_TRADE_PROFIT_TRIGGER_PCT = 15.0  # 15% profit target to trigger auto-treasury sweep
 TREASURY_ALLOCATION_TARGET = 40.0   # Target 40% of family portfolio in risk-free CDBs
+TREASURY_PIX_KEY = "14998223377"    # Pix key for treasury vault sweeps
 
 # Logging Config
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

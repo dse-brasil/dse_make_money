@@ -51,7 +51,8 @@ class RiskManager:
                 "sweep_recommended": True,
                 "sweep_amount": sweep_amount,
                 "reason": f"High Frequency profit exceeded target threshold of {settings.DAY_TRADE_PROFIT_TRIGGER_PCT}%. Locking in 80% of profits.",
-                "target_destination": "CDB / Fixed Income Treasury"
+                "target_destination": "CDB / Fixed Income Treasury",
+                "pix_key": settings.TREASURY_PIX_KEY
             }
             
         # Alternative rule: Rebalance if Fixed Income is below the target allocation
